@@ -4,18 +4,21 @@
   "description": "The redis message queue transport for oro-platform",
   "keywords": ["redis", "message-queue", "oro-platform"],
   "homepage": "https://github.com/vtsykun/redis-message-queue",
-  "license": "GPLv3",
+  "license": "GPL-3.0",
   "authors": [{
     "name": "Tsykun Vladimir",
     "email": "vtsykun@okvpn.org"
   }],
   "require": {
-    "oro/platform": "^2.0"
+    "oro/message-queue": "1.x-dev",
+    "symfony/dependency-injection": "^2.8||^3.0",
+    "symfony/config": "^2.8||^3.0"
   },
   "require-dev": {
     "phpunit/phpunit": "5.7.*"
   },
+  "minimum-stability": "dev",
   "autoload": {
-    "psr-4": { "Okvpn\\Bundle\\RedisQueueBundle": "" }
+    "psr-4": { "Okvpn\\Bundle\\RedisQueueBundle\\": "/src" }
   }
 }
