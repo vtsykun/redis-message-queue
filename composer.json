@@ -10,15 +10,20 @@
     "email": "vtsykun@okvpn.org"
   }],
   "require": {
-    "oro/message-queue": "1.x-dev",
     "symfony/dependency-injection": "^2.8||^3.0",
-    "symfony/config": "^2.8||^3.0"
+    "symfony/config": "^2.8||^3.0",
+    "oro/message-queue": "1.x-dev"
   },
   "require-dev": {
-    "phpunit/phpunit": "5.7.*"
+    "phpunit/phpunit": "5.7.*",
+    "squizlabs/php_codesniffer": "2.7.*"
   },
-  "minimum-stability": "dev",
   "autoload": {
-    "psr-4": { "Okvpn\\Bundle\\RedisQueueBundle\\": "/src" }
+    "psr-4": { "Okvpn\\Bundle\\RedisQueueBundle\\": "" }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.x-dev"
+    }
   }
 }

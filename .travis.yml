@@ -1,0 +1,25 @@
+language: php
+
+sudo: false
+
+cache:
+    directories:
+        - .autoconf
+        - $HOME/.composer
+
+branches:
+    only:
+        - master
+
+services:
+    - redis-server
+
+php:
+    - 7.0
+
+before_script:
+    - sudo apt-get install php-redis
+    - bash .builds/travis.sh install
+script:
+    - bash .builds/travis.sh script unit
+    - bash .builds/travis.sh script phpcs
