@@ -1,0 +1,2 @@
+bundles:
+    - Okvpn\Bundle\RedisQueueBundle\OkvpnRedisQueueBundle
