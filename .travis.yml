@@ -18,7 +18,7 @@ php:
     - 7.0
 
 before_script:
-    - sudo apt-get install php-redis
+    - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
     - bash .builds/travis.sh install
 script:
     - bash .builds/travis.sh script unit
