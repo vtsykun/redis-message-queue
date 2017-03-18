@@ -59,4 +59,4 @@ user=www-data
 ```
 ### License
 
-GPLv3
+MIT
