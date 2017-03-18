@@ -2,9 +2,9 @@
   "name": "okvpn/redis-queue-bundle",
   "type": "symfony-bundle",
   "description": "The redis message queue transport for oro-platform",
-  "keywords": ["redis", "message-queue", "oro-platform"],
+  "keywords": ["Redis", "message-queue", "Oro Platform"],
   "homepage": "https://github.com/vtsykun/redis-message-queue",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "authors": [{
     "name": "Tsykun Vladimir",
     "email": "vtsykun@okvpn.org"
@@ -12,7 +12,7 @@
   "require": {
     "symfony/dependency-injection": "^2.8||^3.0",
     "symfony/config": "^2.8||^3.0",
-    "oro/message-queue": "1.x-dev"
+    "oro/platform": "^2.0"
   },
   "require-dev": {
     "phpunit/phpunit": "5.7.*",
