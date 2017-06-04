@@ -19,7 +19,7 @@
     "squizlabs/php_codesniffer": "2.7.*"
   },
   "autoload": {
-    "psr-4": { "Okvpn\\Bundle\\RedisQueueBundle\\": "" }
+    "psr-4": { "Okvpn\\Bundle\\RedisQueueBundle\\": "src" }
   },
   "suggest":          {
     "ext-redis": "The extension required to use this pool."

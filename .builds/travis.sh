@@ -28,7 +28,7 @@ case "$STEP" in
             ;;
             phpcs)
                 echo "Run phpcs --encoding=utf-8 --extensions=php --standard=psr2 Okvpn/ -p...";
-                php vendor/bin/phpcs --encoding=utf-8 --standard=psr2 --ignore=vendor -p .
+                php vendor/bin/phpcs --encoding=utf-8 --standard=psr2 -p src
             ;;
         esac
     ;;

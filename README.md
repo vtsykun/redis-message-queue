@@ -1,4 +1,4 @@
-# OkvpnRedisQueueBundle ![OkvpnRedisQueueBundle](./Resources/doc/img/redis.png)
+# OkvpnRedisQueueBundle ![OkvpnRedisQueueBundle](./src/Resources/doc/img/redis.png)
 
 
 [![The Build Status](https://travis-ci.org/vtsykun/redis-message-queue.svg?branch=master)](https://travis-ci.org/vtsykun/redis-message-queue)  
