@@ -8,6 +8,7 @@ use Okvpn\Bundle\RedisQueueBundle\Transport\Redis\RedisSession;
 use Oro\Component\MessageQueue\Client\Config;
 use Oro\Component\MessageQueue\Client\DriverInterface;
 use Oro\Component\MessageQueue\Client\Message;
+use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Transport\QueueInterface;
 
 class RedisDriver implements DriverInterface
@@ -51,7 +52,7 @@ class RedisDriver implements DriverInterface
         $transportMessage->setMessageId($message->getMessageId());
         $transportMessage->setTimestamp($message->getTimestamp());
         $transportMessage->setExpire($message->getExpire());
-
+        $transportMessage->setPriority($this->convertMessagePriority($message->getPriority()));
 
         $this->session->createProducer()->send($queue, $transportMessage);
     }
@@ -84,5 +85,29 @@ class RedisDriver implements DriverInterface
     public function getConfig()
     {
         return $this->config;
+    }
+
+    /**
+     * @param string $priority
+     * @return int
+     */
+    private function convertMessagePriority($priority)
+    {
+        $map = [
+            MessagePriority::VERY_LOW => 0,
+            MessagePriority::LOW => 1,
+            MessagePriority::NORMAL => 2,
+            MessagePriority::HIGH => 3,
+            MessagePriority::VERY_HIGH => 4,
+        ];
+
+        if (false == array_key_exists($priority, $map)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Given priority could not be converted to transport\'s one. Got: %s',
+                $priority
+            ));
+        }
+
+        return $map[$priority];
     }
 }

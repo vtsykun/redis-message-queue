@@ -11,8 +11,17 @@
       "email": "vtsykun@okvpn.org"
     }
   ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packagist.orocrm.com"
+    }
+  ],
   "require": {
-    "php": ">=5.5.9"
+    "php": ">=5.5.9",
+    "oro/platform": "2.2.*",
+    "symfony/dependency-injection": "^2.8||^3.0",
+    "symfony/config": "^2.8||^3.0"
   },
   "require-dev": {
     "phpunit/phpunit": "5.7.*",
@@ -24,6 +33,8 @@
   "suggest":          {
     "ext-redis": "The extension required to use this pool."
   },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "extra": {
     "branch-alias": {
       "dev-master": "1.x-dev"

@@ -11,7 +11,7 @@ case "$STEP" in
             chmod 777 -R vendor
             rm -r vendor
         fi
-        composer install
+        COMPOSER=dev.json composer install
     ;;
     script)
 
@@ -28,7 +28,7 @@ case "$STEP" in
             ;;
             phpcs)
                 echo "Run phpcs --encoding=utf-8 --extensions=php --standard=psr2 Okvpn/ -p...";
-                php vendor/bin/phpcs --encoding=utf-8 --standard=psr2 --ignore=vendor -p .
+                php vendor/bin/phpcs --encoding=utf-8 --standard=psr2 -p src
             ;;
         esac
     ;;

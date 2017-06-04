@@ -34,7 +34,7 @@ class RedisMessageProducer implements MessageProducerInterface
     {
         $body = $message->getBody();
         if (is_scalar($body) || is_null($body)) {
-            $body = (string)$body;
+            $body = (string) $body;
         } else {
             throw new InvalidMessageException(sprintf(
                 'The message body must be a scalar or null. Got: %s',
@@ -51,14 +51,17 @@ class RedisMessageProducer implements MessageProducerInterface
         }
 
         try {
-            $redisKey = new RedisKey();
+            $rMessage = [
+                'body' => $body,
+                'headers' => $message->getHeaders(),
+                'properties' => $message->getProperties()
+            ];
+
             $connection = $this->connection->getRedisConnection();
-
-            $connection->lPush($name, $redisKey->keyMessage());
-
-            $connection->set($redisKey->keyBody(), $body);
-            $connection->set($redisKey->keyHeaders(), JSON::encode($message->getHeaders()));
-            $connection->set($redisKey->keyProperties(), JSON::encode($message->getProperties()));
+            $connection->lPush(
+                $this->connection->getListName($name, $message->getPriority()),
+                JSON::encode($rMessage)
+            );
         } catch (\Exception $e) {
             throw new Exception('The transport fails to send the message due to some internal error.', null, $e);
         }
