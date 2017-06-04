@@ -1,7 +1,10 @@
-# OkvpnRedisQueueBundle
+# OkvpnRedisQueueBundle ![OkvpnRedisQueueBundle](./Resources/doc/img/redis.png)
 
 
-[![The Build Status](https://travis-ci.org/vtsykun/redis-message-queue.svg?branch=master)](https://travis-ci.org/vtsykun/redis-message-queue)  [![SensioLabsInsight](https://insight.sensiolabs.com/projects/40a378ee-6fb9-438b-9f23-262661b5ce2c/mini.png)](https://insight.sensiolabs.com/projects/40a378ee-6fb9-438b-9f23-262661b5ce2c)
+[![The Build Status](https://travis-ci.org/vtsykun/redis-message-queue.svg?branch=master)](https://travis-ci.org/vtsykun/redis-message-queue)  
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/40a378ee-6fb9-438b-9f23-262661b5ce2c/mini.png)](https://insight.sensiolabs.com/projects/40a378ee-6fb9-438b-9f23-262661b5ce2c)
+[![Latest Stable Version](https://poser.pugx.org/okvpn/redis-queue-bundle/v/stable)](https://packagist.org/packages/okvpn/redis-queue-bundle)
+[![License](https://poser.pugx.org/okvpn/redis-queue-bundle/license)](https://packagist.org/packages/okvpn/redis-queue-bundle)
 
 The bundle integrates OroMessageQueue component. It provides more faster redis message queue transport for oro-platform
 vs DBAL. See [OroMessageBundle](https://github.com/orocrm/platform/tree/master/src/Oro/Bundle/MessageQueueBundle) for details.

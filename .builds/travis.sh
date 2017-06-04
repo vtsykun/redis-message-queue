@@ -11,7 +11,7 @@ case "$STEP" in
             chmod 777 -R vendor
             rm -r vendor
         fi
-        composer install
+        COMPOSER=dev.json composer install
     ;;
     script)
 
