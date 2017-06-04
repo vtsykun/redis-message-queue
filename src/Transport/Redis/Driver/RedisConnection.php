@@ -3,6 +3,7 @@
 namespace Okvpn\Bundle\RedisQueueBundle\Transport\Redis\Driver;
 
 use Okvpn\Bundle\RedisQueueBundle\Transport\Redis\RedisSession;
+use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Transport\ConnectionInterface;
 
 class RedisConnection implements ConnectionInterface
@@ -71,6 +72,20 @@ class RedisConnection implements ConnectionInterface
     public function getListName($queueName, $priority = 0)
     {
         return sprintf('%s_%s_%s', $this->config['redisTablePrefix'], $queueName, $priority);
+    }
+
+    /**
+     * @return array
+     */
+    public function getPriorityMap()
+    {
+        return [
+            MessagePriority::VERY_HIGH => 4,
+            MessagePriority::HIGH => 3,
+            MessagePriority::NORMAL => 2,
+            MessagePriority::LOW => 1,
+            MessagePriority::VERY_LOW => 0,
+        ];
     }
 
     private function initialize()

@@ -93,21 +93,15 @@ class RedisDriver implements DriverInterface
      */
     private function convertMessagePriority($priority)
     {
-        $map = [
-            MessagePriority::VERY_LOW => 0,
-            MessagePriority::LOW => 1,
-            MessagePriority::NORMAL => 2,
-            MessagePriority::HIGH => 3,
-            MessagePriority::VERY_HIGH => 4,
-        ];
+        $priorityMap = $this->session->getConnection()->getPriorityMap();
 
-        if (false == array_key_exists($priority, $map)) {
+        if (false === array_key_exists($priority, $priorityMap)) {
             throw new \InvalidArgumentException(sprintf(
                 'Given priority could not be converted to transport\'s one. Got: %s',
                 $priority
             ));
         }
 
-        return $map[$priority];
+        return $priorityMap[$priority];
     }
 }

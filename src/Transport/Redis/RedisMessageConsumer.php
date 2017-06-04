@@ -110,20 +110,21 @@ class RedisMessageConsumer implements MessageConsumerInterface
      */
     protected function receiveMessage()
     {
-        $connection =  $this->connection->getRedisConnection();
-
-        $priority = 4;
         $message = false;
-        while ($priority-- && $message === false) {
+        $connection =  $this->connection->getRedisConnection();
+        foreach ($this->connection->getPriorityMap() as $priority) {
             $name = $this->connection->getListName($this->queue->getQueueName(), $priority);
             $message = $connection->rPop($name);
+            if (false !== $message) {
+                break;
+            }
         }
 
         if (false === $message) {
             return null;
         }
 
-        $message = Json::decode($message);
+        $message = JSON::decode($message);
 
         return $this->createMessageFromData($message);
     }
