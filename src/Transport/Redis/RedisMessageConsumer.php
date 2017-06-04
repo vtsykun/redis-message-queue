@@ -119,10 +119,11 @@ class RedisMessageConsumer implements MessageConsumerInterface
             $message = $connection->rPop($name);
         }
 
-        $message = Json::decode($message);
-        if (!$message) {
+        if (false === $message) {
             return null;
         }
+
+        $message = Json::decode($message);
 
         return $this->createMessageFromData($message);
     }
