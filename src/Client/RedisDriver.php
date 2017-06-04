@@ -8,7 +8,6 @@ use Okvpn\Bundle\RedisQueueBundle\Transport\Redis\RedisSession;
 use Oro\Component\MessageQueue\Client\Config;
 use Oro\Component\MessageQueue\Client\DriverInterface;
 use Oro\Component\MessageQueue\Client\Message;
-use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Transport\QueueInterface;
 
 class RedisDriver implements DriverInterface
