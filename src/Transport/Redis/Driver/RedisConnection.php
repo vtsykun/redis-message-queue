@@ -5,11 +5,12 @@ namespace Okvpn\Bundle\RedisQueueBundle\Transport\Redis\Driver;
 use Okvpn\Bundle\RedisQueueBundle\Transport\Redis\RedisSession;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Transport\ConnectionInterface;
+use Snc\RedisBundle\DependencyInjection\Configuration\RedisDsn;
 
 class RedisConnection implements ConnectionInterface
 {
-    /** @var */
-    private $config = [];
+    /** @var RedisDsn */
+    private $dsn;
 
     /** @var bool */
     private $initialized = false;
@@ -22,17 +23,7 @@ class RedisConnection implements ConnectionInterface
      */
     public function __construct(array $config)
     {
-        $config = array_replace(
-            [
-                'host' => '127.0.0.1',
-                'port' => 6379,
-                'timeout' => 0.0,
-                'retry_interval' => 0
-            ],
-            $config
-        );
-
-        $this->config = $config;
+        $this->dsn = new RedisDsn($config['dsn']);
         $this->connection = new \Redis();
     }
 
@@ -71,7 +62,7 @@ class RedisConnection implements ConnectionInterface
      */
     public function getListName($queueName, $priority = 0)
     {
-        return sprintf('%s_%s_%s', $this->config['redisTablePrefix'], $queueName, $priority);
+        return sprintf('%s.%s', $queueName, $priority);
     }
 
     /**
@@ -94,8 +85,22 @@ class RedisConnection implements ConnectionInterface
             return;
         }
 
-        $config = $this->config;
-        $this->connection->connect($config['host'], $config['port'], $config['timeout'], $config['retry_interval']);
+        if (null !== $this->dsn->getSocket()) {
+            $this->connection->connect($this->dsn->getSocket());
+        } else {
+            $this->connection->connect(
+                $this->dsn->getHost(),
+                $this->dsn->getPort()
+            );
+        }
+
+        if ('' !== $this->dsn->getPassword()) {
+            $this->connection->auth($this->dsn->getPassword());
+        }
+
+        if (0 !== $this->dsn->getDatabase()) {
+            $this->connection->select($this->dsn->getDatabase());
+        }
 
         $this->initialized = true;
     }

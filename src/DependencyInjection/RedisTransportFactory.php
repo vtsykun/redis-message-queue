@@ -6,6 +6,7 @@ use Okvpn\Bundle\RedisQueueBundle\Transport\Redis\RedisConnection;
 
 use Oro\Component\MessageQueue\DependencyInjection\TransportFactoryInterface;
 
+use Snc\RedisBundle\DependencyInjection\Configuration\RedisDsn;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -32,9 +33,19 @@ class RedisTransportFactory implements TransportFactoryInterface
     {
         $builder
             ->children()
-                ->scalarNode('host')->defaultValue('127.0.0.1')->cannotBeEmpty()->end()
-                ->scalarNode('port')->defaultValue(6379)->cannotBeEmpty()->end()
-                ->scalarNode('redisTablePrefix')->defaultValue('okvpn_mq')->cannotBeEmpty()->end();
+                ->scalarNode('dsn')
+                    ->defaultValue('redis://@127.0.0.1:6379/0')
+                    ->validate()
+                        ->ifTrue(
+                            function($dsn) {
+                                $parsed = new RedisDsn($dsn);
+                                return !$parsed->isValid();
+                            }
+                        )
+                        ->thenInvalid('The redis DSN %s is invalid.')
+                    ->end()
+                    ->cannotBeEmpty()
+                ->end();
     }
 
     /**
