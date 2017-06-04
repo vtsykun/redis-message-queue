@@ -37,7 +37,7 @@ class RedisTransportFactory implements TransportFactoryInterface
                     ->defaultValue('redis://@127.0.0.1:6379/0')
                     ->validate()
                         ->ifTrue(
-                            function($dsn) {
+                            function ($dsn) {
                                 $parsed = new RedisDsn($dsn);
                                 return !$parsed->isValid();
                             }
