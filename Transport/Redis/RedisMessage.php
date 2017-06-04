@@ -90,7 +90,7 @@ class RedisMessage implements MessageInterface
      */
     public function getHeader($name, $default = null)
     {
-        return array_key_exists($name, $this->headers) ?$this->headers[$name] : $default;
+        return array_key_exists($name, $this->headers) ? $this->headers[$name] : $default;
     }
 
     /**
@@ -186,5 +186,24 @@ class RedisMessage implements MessageInterface
         $this->expire = $expire;
 
         return $this;
+    }
+
+    /**
+     * @param int $priority
+     * @return $this
+     */
+    public function setPriority($priority)
+    {
+        $this->headers['priority'] = $priority;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPriority()
+    {
+        return $this->getHeader('priority', 0);
     }
 }

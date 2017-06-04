@@ -45,6 +45,6 @@ class RedisConnection implements ConnectionInterface
     {
         $redisConnection = new BaseConnection($config);
 
-        return new static($redisConnection, $config);
+        return new static($redisConnection);
     }
 }

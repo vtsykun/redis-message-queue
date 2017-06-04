@@ -2,7 +2,10 @@
 
 namespace Okvpn\Bundle\RedisQueueBundle\Transport\Redis\Driver;
 
-class RedisConnection
+use Okvpn\Bundle\RedisQueueBundle\Transport\Redis\RedisSession;
+use Oro\Component\MessageQueue\Transport\ConnectionInterface;
+
+class RedisConnection implements ConnectionInterface
 {
     /** @var */
     private $config = [];
@@ -33,6 +36,14 @@ class RedisConnection
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function createSession()
+    {
+        return new RedisSession($this);
+    }
+
+    /**
      * @return \Redis
      */
     public function getRedisConnection()
@@ -50,6 +61,16 @@ class RedisConnection
         if (true === $this->initialized) {
             $this->connection->close();
         }
+    }
+
+    /**
+     * @param string $queueName
+     * @param int $priority
+     * @return string
+     */
+    public function getListName($queueName, $priority = 0)
+    {
+        return sprintf('%s_%s_%s', $this->config['redisTablePrefix'], $queueName, $priority);
     }
 
     private function initialize()

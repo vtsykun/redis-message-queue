@@ -10,8 +10,6 @@
     "email": "vtsykun@okvpn.org"
   }],
   "require": {
-    "symfony/dependency-injection": "^2.8||^3.0",
-    "symfony/config": "^2.8||^3.0",
     "oro/platform": "^2.0"
   },
   "require-dev": {

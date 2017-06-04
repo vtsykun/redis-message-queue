@@ -112,27 +112,19 @@ class RedisMessageConsumer implements MessageConsumerInterface
     {
         $connection =  $this->connection->getRedisConnection();
 
-        $messageId = $connection->rPop($this->queue->getQueueName());
+        $priority = 4;
+        $message = false;
+        while ($priority-- && $message === false) {
+            $name = $this->connection->getListName($this->queue->getQueueName(), $priority);
+            $message = $connection->rPop($name);
+        }
 
-        if (false === $messageId) {
+        $message = Json::decode($message);
+        if (!$message) {
             return null;
         }
 
-        $redisKey = new RedisKey($messageId);
-
-        $message = $this->createMessageFromData(
-            [
-                'body' => $connection->get($redisKey->keyBody()),
-                'headers' => $connection->get($redisKey->keyHeaders()),
-                'properties' => $connection->get($redisKey->keyProperties())
-            ]
-        );
-
-        $connection->delete(
-            [$redisKey->keyBody(), $redisKey->keyHeaders(), $redisKey->keyProperties()]
-        );
-
-        return $message;
+        return $this->createMessageFromData($message);
     }
 
     /**
@@ -143,15 +135,14 @@ class RedisMessageConsumer implements MessageConsumerInterface
     protected function createMessageFromData(array $redisMessage)
     {
         $message = $this->session->createMessage();
-
         $message->setBody($redisMessage['body']);
 
         if ($redisMessage['headers']) {
-            $message->setHeaders(JSON::decode($redisMessage['headers']));
+            $message->setHeaders($redisMessage['headers']);
         }
 
         if ($redisMessage['properties']) {
-            $message->setProperties(JSON::decode($redisMessage['properties']));
+            $message->setProperties($redisMessage['properties']);
         }
 
         return $message;

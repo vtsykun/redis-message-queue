@@ -33,7 +33,8 @@ class RedisTransportFactory implements TransportFactoryInterface
         $builder
             ->children()
                 ->scalarNode('host')->defaultValue('127.0.0.1')->cannotBeEmpty()->end()
-                ->scalarNode('port')->defaultValue(6379)->cannotBeEmpty()->end();
+                ->scalarNode('port')->defaultValue(6379)->cannotBeEmpty()->end()
+                ->scalarNode('redisTablePrefix')->defaultValue('okvpn_mq')->cannotBeEmpty()->end();
     }
 
     /**
