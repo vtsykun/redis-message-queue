@@ -7,19 +7,19 @@ use Oro\Component\MessageQueue\Transport\MessageInterface;
 class RedisMessage implements MessageInterface
 {
     /** @var string */
-    private $body;
+    protected $body;
     
     /** @var array */
-    private $properties;
+    protected $properties;
 
     /** @var array */
-    private $headers;
+    protected $headers;
 
     /** @var bool */
-    private $redelivered;
+    protected $redelivered;
 
     /** @var int|null */
-    private $expire;
+    protected $expire;
 
     public function __construct()
     {

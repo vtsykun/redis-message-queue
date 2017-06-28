@@ -9,7 +9,7 @@ use Oro\Component\MessageQueue\Transport\ConnectionInterface;
 class RedisConnection implements ConnectionInterface
 {
     /** @var BaseConnection */
-    private $connection;
+    protected $connection;
 
     /**
      * @param BaseConnection $connection

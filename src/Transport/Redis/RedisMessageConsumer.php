@@ -11,16 +11,16 @@ use Oro\Component\MessageQueue\Util\JSON;
 class RedisMessageConsumer implements MessageConsumerInterface
 {
     /** @var RedisSession */
-    private $session;
+    protected $session;
 
     /** @var RedisConnection */
-    private $connection;
+    protected $connection;
 
     /** @var RedisQueue */
-    private $queue;
+    protected $queue;
 
     /** @var int microseconds */
-    private $pollingInterval = 1000000;
+    protected $pollingInterval = 1000000;
 
     public function __construct(RedisSession $session, RedisQueue $queue)
     {

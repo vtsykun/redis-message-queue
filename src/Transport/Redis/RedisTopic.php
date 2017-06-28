@@ -6,10 +6,8 @@ use Oro\Component\MessageQueue\Transport\TopicInterface;
 
 class RedisTopic implements TopicInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
+    /** @var string */
+    protected $name;
 
     /**
      * @param string $name

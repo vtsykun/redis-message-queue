@@ -9,7 +9,7 @@ class RedisQueue implements QueueInterface
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @param string $name

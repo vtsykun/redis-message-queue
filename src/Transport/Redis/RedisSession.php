@@ -12,7 +12,7 @@ class RedisSession implements SessionInterface
     /**
      * @var RedisConnection
      */
-    private $connection;
+    protected $connection;
 
     /**
      * @param RedisConnection $connection
