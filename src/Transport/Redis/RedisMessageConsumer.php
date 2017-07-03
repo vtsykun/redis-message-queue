@@ -148,9 +148,8 @@ class RedisMessageConsumer implements MessageConsumerInterface
             return null;
         }
 
-        $message = JSON::decode($message);
-
-        return $this->createMessageFromData($message);
+        $message = $this->createMessageFromData(JSON::decode($message));
+        return $message->getExpire() > time() ? $message : null;
     }
 
     /**
