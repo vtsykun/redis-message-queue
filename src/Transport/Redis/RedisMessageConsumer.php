@@ -3,7 +3,6 @@
 namespace Okvpn\Bundle\RedisQueueBundle\Transport\Redis;
 
 use Okvpn\Bundle\RedisQueueBundle\Transport\Redis\Driver\RedisConnection;
-
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\MessageConsumerInterface;
 use Oro\Component\MessageQueue\Util\JSON;
@@ -100,9 +99,32 @@ class RedisMessageConsumer implements MessageConsumerInterface
 
     /**
      * {@inheritdoc}
+     * @param RedisMessage $message
      */
     public function reject(MessageInterface $message, $requeue = false)
     {
+        if ($requeue === true) {
+            $connection =  $this->connection->getRedisConnection();
+            $name = $this->queue->getQueueName();
+            $rMessage = [
+                'body' => $message->getBody(),
+                'headers' => $message->getHeaders(),
+                'properties' => $message->getProperties()
+            ];
+
+            if ($message->getDelay() !== null) {
+                $connection->zAdd(
+                    $this->connection->getSetsName($name),
+                    $message->getDelay(),
+                    JSON::encode($rMessage)
+                );
+            } else {
+                $connection->lPush(
+                    $this->connection->getListName($name, $message->getPriority()),
+                    JSON::encode($rMessage)
+                );
+            }
+        }
     }
 
     /**
@@ -112,6 +134,8 @@ class RedisMessageConsumer implements MessageConsumerInterface
     {
         $message = false;
         $connection =  $this->connection->getRedisConnection();
+        $this->processDelay($connection);
+
         foreach ($this->connection->getPriorityMap() as $priority) {
             $name = $this->connection->getListName($this->queue->getQueueName(), $priority);
             $message = $connection->rPop($name);
@@ -127,6 +151,32 @@ class RedisMessageConsumer implements MessageConsumerInterface
         $message = JSON::decode($message);
 
         return $this->createMessageFromData($message);
+    }
+
+    /**
+     * @param \Redis $connection
+     */
+    protected function processDelay(\Redis $connection)
+    {
+        $currentTime = time();
+        $setsName = $this->connection->getSetsName($this->queue->getQueueName());
+        $connection->watch($setsName);
+        $messages = $connection->zRangeByScore($setsName, 0, $currentTime);
+        if ($messages) {
+            $connection->multi();
+            $connection->zDeleteRangeByScore($setsName, 0, $currentTime);
+
+            foreach ($messages as $rMessage) {
+                $message = $this->createMessageFromData(JSON::decode($rMessage));
+                $connection->lPush(
+                    $this->connection->getListName($this->queue->getQueueName(), $message->getPriority()),
+                    $rMessage
+                );
+            }
+            $connection->exec();
+        } else {
+            $connection->unwatch();
+        }
     }
 
     /**

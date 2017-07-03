@@ -58,10 +58,18 @@ class RedisMessageProducer implements MessageProducerInterface
             ];
 
             $connection = $this->connection->getRedisConnection();
-            $connection->lPush(
-                $this->connection->getListName($name, $message->getPriority()),
-                JSON::encode($rMessage)
-            );
+            if ($message->getDelay() !== null) {
+                $connection->zAdd(
+                    $this->connection->getSetsName($name),
+                    $message->getDelay(),
+                    JSON::encode($rMessage)
+                );
+            } else {
+                $connection->lPush(
+                    $this->connection->getListName($name, $message->getPriority()),
+                    JSON::encode($rMessage)
+                );
+            }
         } catch (\Exception $e) {
             throw new Exception('The transport fails to send the message due to some internal error.', null, $e);
         }

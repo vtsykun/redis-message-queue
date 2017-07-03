@@ -12,6 +12,8 @@ use Oro\Component\MessageQueue\Transport\QueueInterface;
 
 class RedisDriver implements DriverInterface
 {
+    const MAX_DELAY = 100000000;
+
     /** @var RedisSession */
     protected $session;
 
@@ -40,6 +42,14 @@ class RedisDriver implements DriverInterface
     {
         $headers = $message->getHeaders();
         $properties = $message->getProperties();
+        list($expire, $delay) = [$message->getExpire(), $message->getDelay()];
+        //expire should be unix timestamp, check that
+        if ($expire < self::MAX_DELAY) {
+            $expire += time();
+        }
+        if ($delay < self::MAX_DELAY) {
+            $delay += time();
+        }
 
         $headers['content_type'] = $message->getContentType();
 
@@ -47,11 +57,11 @@ class RedisDriver implements DriverInterface
         $transportMessage->setBody($message->getBody());
         $transportMessage->setHeaders($headers);
         $transportMessage->setProperties($properties);
-
         $transportMessage->setMessageId($message->getMessageId());
         $transportMessage->setTimestamp($message->getTimestamp());
-        $transportMessage->setExpire($message->getExpire());
+        $transportMessage->setExpire($expire);
         $transportMessage->setPriority($this->convertMessagePriority($message->getPriority()));
+        $transportMessage->setDelay($delay);
 
         $this->session->createProducer()->send($queue, $transportMessage);
     }
