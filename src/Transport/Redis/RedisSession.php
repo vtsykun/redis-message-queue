@@ -111,6 +111,14 @@ class RedisSession implements SessionInterface
     }
 
     /**
+     * @return MessageManagerInterface
+     */
+    public function createMessageManager()
+    {
+        return new RedisMessageManager($this->connection);
+    }
+
+    /**
      * @return RedisConnection
      */
     public function getConnection()
