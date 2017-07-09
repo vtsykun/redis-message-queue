@@ -66,6 +66,15 @@ class RedisConnection implements ConnectionInterface
     }
 
     /**
+     * @param string $queueName
+     * @return string
+     */
+    public function getSetsName($queueName)
+    {
+        return sprintf('sets.%s', $queueName);
+    }
+
+    /**
      * @return array
      */
     public function getPriorityMap()

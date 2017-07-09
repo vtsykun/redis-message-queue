@@ -18,8 +18,8 @@ class RedisMessage implements MessageInterface
     /** @var bool */
     protected $redelivered;
 
-    /** @var int|null */
-    protected $expire;
+    /** @var int */
+    protected $delay;
 
     public function __construct()
     {
@@ -173,30 +173,25 @@ class RedisMessage implements MessageInterface
      */
     public function getExpire()
     {
-        return $this->expire;
+        return $this->getHeader('expire');
     }
 
     /**
      * @param int|null $expire
-     *
-     * @return self
      */
     public function setExpire($expire)
     {
-        $this->expire = $expire;
-
-        return $this;
+        if (is_numeric($expire)) {
+            $this->headers['expire'] = (int) $expire;
+        }
     }
 
     /**
      * @param int $priority
-     * @return $this
      */
     public function setPriority($priority)
     {
         $this->headers['priority'] = $priority;
-
-        return $this;
     }
 
     /**
@@ -205,5 +200,21 @@ class RedisMessage implements MessageInterface
     public function getPriority()
     {
         return $this->getHeader('priority', 0);
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDelay()
+    {
+        return $this->delay;
+    }
+
+    /**
+     * @param int|null $delay
+     */
+    public function setDelay($delay)
+    {
+        $this->delay = $delay;
     }
 }
