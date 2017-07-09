@@ -19,7 +19,7 @@ class RedisMessageConsumer implements MessageConsumerInterface
     protected $queue;
 
     /** @var int microseconds */
-    protected $pollingInterval = 1000000;
+    protected $pollingInterval = 100000;
 
     public function __construct(RedisSession $session, RedisQueue $queue)
     {
@@ -149,7 +149,9 @@ class RedisMessageConsumer implements MessageConsumerInterface
         }
 
         $message = $this->createMessageFromData(JSON::decode($message));
-        return $message->getExpire() > time() ? $message : null;
+        $expire = $message->getExpire();
+
+        return ($expire !== null && $expire < time()) ? null : $message;
     }
 
     /**

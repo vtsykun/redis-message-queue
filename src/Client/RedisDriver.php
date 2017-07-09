@@ -44,10 +44,10 @@ class RedisDriver implements DriverInterface
         $properties = $message->getProperties();
         list($expire, $delay) = [$message->getExpire(), $message->getDelay()];
         //expire should be unix timestamp, check that
-        if ($expire < self::MAX_DELAY) {
+        if ($expire !== null && $expire < self::MAX_DELAY) {
             $expire += time();
         }
-        if ($delay < self::MAX_DELAY) {
+        if ($delay !== null && $delay < self::MAX_DELAY) {
             $delay += time();
         }
 
