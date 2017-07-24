@@ -1,0 +1,25 @@
+services:
+    okvpn_redis_queue.message_storage:
+        class: Okvpn\Bundle\RedisQueueBundle\Transport\MessageStorage
+
+    okvpn_redis_queue.client.message_producer:
+        class: Okvpn\Bundle\RedisQueueBundle\Client\LaterMessageProducer
+        decorates: oro_message_queue.client.message_producer
+        decoration_priority: 50
+        arguments:
+            - '@okvpn_redis_queue.client.message_producer.inner'
+            - '@okvpn_redis_queue.message_storage'
+
+    okvpn_redis_queue.extension.flush_message:
+        class: Okvpn\Bundle\RedisQueueBundle\Extension\FlushMessageExtension
+        arguments:
+            - '@okvpn_redis_queue.client.message_producer'
+        tags:
+            - { name: oro_message_queue.consumption.extension }
+
+    okvpn_redis_queue.listener.flush_message:
+        class: Okvpn\Bundle\RedisQueueBundle\EventListener\FlushMessageListener
+        arguments:
+            - '@okvpn_redis_queue.client.message_producer'
+        tags:
+            - { name: kernel.event_listener, event: kernel.terminate, method: onKernelTerminate }

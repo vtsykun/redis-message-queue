@@ -8,8 +8,10 @@ use Oro\Component\MessageQueue\DependencyInjection\TransportFactoryInterface;
 
 use Snc\RedisBundle\DependencyInjection\Configuration\RedisDsn;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 class RedisTransportFactory implements TransportFactoryInterface
 {
@@ -57,6 +59,9 @@ class RedisTransportFactory implements TransportFactoryInterface
         $connection->setFactory([RedisConnection::class, 'createConnection']);
         $connectionId = sprintf('oro_message_queue.transport.%s.connection', $this->getName());
         $container->setDefinition($connectionId, $connection);
+
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('redis.yml');
         
         return $connectionId;
     }
