@@ -22,4 +22,5 @@ services:
         arguments:
             - '@okvpn_redis_queue.client.message_producer'
         tags:
-            - { name: kernel.event_listener, event: kernel.terminate, method: onKernelTerminate }
+            - { name: kernel.event_listener, event: kernel.terminate, method: onTerminate }
+            - { name: kernel.event_listener, event: console.terminate, method: onTerminate }

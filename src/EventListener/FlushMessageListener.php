@@ -15,12 +15,12 @@ class FlushMessageListener
      */
     public function __construct(MessageProducerInterface $messageProducer = null)
     {
-        if ($this->messageProducer instanceof LaterMessageProducer) {
+        if ($messageProducer instanceof LaterMessageProducer) {
             $this->messageProducer = $messageProducer;
         }
     }
 
-    public function onKernelTerminate()
+    public function onTerminate()
     {
         if ($this->messageProducer !== null) {
             $this->messageProducer->flush();

@@ -3,6 +3,7 @@
 namespace Okvpn\Bundle\RedisQueueBundle\Extension;
 
 use Okvpn\Bundle\RedisQueueBundle\Client\LaterMessageProducer;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Oro\Component\MessageQueue\Consumption\AbstractExtension;
 use Oro\Component\MessageQueue\Consumption\Context;
 
@@ -12,9 +13,9 @@ class FlushMessageExtension extends AbstractExtension
     private $messageProducer;
 
     /**
-     * @param LaterMessageProducer $messageProducer
+     * @param LaterMessageProducer|MessageProducerInterface $messageProducer
      */
-    public function __construct(LaterMessageProducer $messageProducer)
+    public function __construct(MessageProducerInterface $messageProducer)
     {
         $this->messageProducer = $messageProducer;
     }
